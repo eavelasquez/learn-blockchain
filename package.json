@@ -1,0 +1,9 @@
+{
+  "name": "learn-blockchain",
+  "version": "1.0.0",
+  "description": "Learn Blockchain is a project to learn about blockchain technology",
+  "main": "index.js",
+  "author": "Esteban Velasquez <eavc.30@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
