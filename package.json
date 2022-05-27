@@ -1,8 +1,15 @@
 {
   "name": "learn-blockchain",
   "version": "1.0.0",
+  "type": "module",
   "description": "Learn Blockchain is a project to learn about blockchain technology",
   "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .js src",
+    "start": "babel-node index.js",
+    "start:dev": "nodemon --exec yarn start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "author": "Esteban Velasquez <eavc.30@gmail.com>",
   "license": "MIT",
   "private": false,
