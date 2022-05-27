@@ -5,7 +5,10 @@ const main = () => {
   console.log('Hello World');
   console.log(`${pkg.name} v${pkg.version}`);
 
-  const block = new Block('Data', 'Hash', 'Previous Hash', Date.now());
+  const { genesis } = Block;
+  console.log(genesis.toString());
+
+  const block = new Block('Data', 'Hash', genesis.hash, Date.now());
   console.log(block.toString());
 };
 
