@@ -5,7 +5,8 @@
     "node": true
   },
   "rules": {
-    "no-console": "off",
-    "max-len": [1, 120, { "tabWidth": 2, "ignoreComments": true }]
+    "import/extensions": ["ignorePackages"],
+    "max-len": [1, 120, { "tabWidth": 2, "ignoreComments": true }],
+    "no-console": "off"
   }
 }
