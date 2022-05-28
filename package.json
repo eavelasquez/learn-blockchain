@@ -8,7 +8,8 @@
     "lint": "eslint --ext .js src",
     "start": "babel-node index.js",
     "start:dev": "nodemon --exec yarn start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "author": "Esteban Velasquez <eavc.30@gmail.com>",
   "license": "MIT",
@@ -20,9 +21,15 @@
     "eslint": "^8.16.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16"
   },
   "dependencies": {
     "crypto-js": "^4.1.1"
+  },
+  "jest": {
+    "silent": true,
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }
