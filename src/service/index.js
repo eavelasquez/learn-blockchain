@@ -23,6 +23,15 @@ app.use((req, _res, next) => {
 
 app.get('/health', (_req, res) => res.send('OK'));
 app.get('/blocks', (_req, res) => res.send(blockchain.chain));
+app.post('/mine', (req, res) => {
+  const { body: { data } } = req;
+  const block = blockchain.addBlock(data);
+  res.json({
+    block,
+    message: 'New block added',
+    totalBlocks: blockchain.chain.length,
+  });
+});
 
 app.listen(port, () => {
   console.log(`HTTP server listening on http://localhost:${port}`);
