@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import Blockchain from '../blockchain/index.js';
 import P2PService from './p2p.js';
 
-const { port = 3000 } = process.env;
+const { HTTP_PORT: httpPort = 3000 } = process.env;
 
 const app = express();
 const blockchain = new Blockchain();
@@ -40,7 +40,7 @@ app.post('/mine', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`HTTP server listening on http://localhost:${port}`);
+app.listen(httpPort, () => {
+  console.log(`HTTP server listening on http://localhost:${httpPort}`);
   p2pService.listen();
 });

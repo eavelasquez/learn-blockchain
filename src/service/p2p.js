@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 
-const { p2pPort = 5000, peersToConnect } = process.env;
+const { P2P_PORT: p2pPort = 5000, PEERS: peersToConnect } = process.env;
 const peers = peersToConnect ? peersToConnect.split(',') : [];
 
 class P2PService {
