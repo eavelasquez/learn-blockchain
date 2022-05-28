@@ -2,11 +2,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import Blockchain from '../blockchain/index.js';
+import P2PService from './p2p.js';
 
 const { port = 3000 } = process.env;
 
 const app = express();
 const blockchain = new Blockchain();
+const p2pService = new P2PService(blockchain);
 
 app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,4 +42,5 @@ app.post('/mine', (req, res) => {
 
 app.listen(port, () => {
   console.log(`HTTP server listening on http://localhost:${port}`);
+  p2pService.listen();
 });
