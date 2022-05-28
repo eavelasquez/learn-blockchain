@@ -21,8 +21,13 @@ app.use((req, _res, next) => {
   next();
 });
 
+// curl -X GET http://localhost:3000/health
 app.get('/health', (_req, res) => res.send('OK'));
+
+// curl -X GET http://localhost:3000/blocks
 app.get('/blocks', (_req, res) => res.send(blockchain.chain));
+
+// curl -X POST -H "Content-Type: application/json" -d '{"data": "Block 1"}' http://localhost:3000/mine
 app.post('/mine', (req, res) => {
   const { body: { data } } = req;
   const block = blockchain.addBlock(data);
