@@ -6,9 +6,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ext .js src",
-    "start": "babel-node index.js",
+    "start": "babel-node src/service/index.js",
     "start:dev": "nodemon --exec yarn start",
-    "start:server": "babel-node src/service/index.js",
+    "start:instance": "sh ./scripts/start.sh",
+    "start:sample": "nodemon --exec babel-node index.js",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
