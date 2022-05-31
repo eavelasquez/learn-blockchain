@@ -11,13 +11,25 @@ class P2PService {
   }
 
   onConnection(socket) {
-    const { blockchain: { chain } } = this;
-
     console.log('[ws:socket] connected');
     this.sockets.push(socket);
 
     socket.on('message', (message) => {
       const { type, value } = JSON.parse(message);
+
+      try {
+        switch (type) {
+          case MESSAGE_TYPES.chain:
+            this.blockchain.replaceChain(value);
+            break;
+          default:
+            console.log(`[ws:socket] unknown message type: ${type}`);
+            break;
+        }
+      } catch (error) {
+        console.log(`[ws:message] error ${error.message}`);
+      }
+
       console.group('[ws:message]');
       console.log(`type: ${type} | value:`);
       console.log(value);
@@ -27,7 +39,7 @@ class P2PService {
     socket.send(
       JSON.stringify({
         type: MESSAGE_TYPES.chain,
-        value: chain,
+        value: this.blockchain.chain,
       })
     );
   }
@@ -41,7 +53,7 @@ class P2PService {
       socket.on('open', () => this.onConnection(socket));
     });
 
-    console.log(`Listening for peer-to-peer connections on: ${p2pPort}`);
+    console.log(`WebSocket server listening on ws://localhost:${p2pPort}`);
   }
 
   broadcast(type, value) {
@@ -49,6 +61,10 @@ class P2PService {
 
     const message = JSON.stringify({ type, value });
     this.sockets.forEach((socket) => socket.send(message));
+  }
+
+  sync() {
+    this.broadcast(MESSAGE_TYPES.chain, this.blockchain.chain);
   }
 }
 
