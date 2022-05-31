@@ -23,8 +23,21 @@ app.use((req, _res, next) => {
   next();
 });
 
-// curl -X GET http://localhost:3000/health
-app.get('/health', (_req, res) => res.send('OK'));
+// curl -X GET http://localhost:3000/healthcheck
+app.get('/healthcheck', (_req, res) => {
+  const healthcheck = {
+    uptime: process.uptime(),
+    message: 'OK',
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    res.send(healthcheck);
+  } catch (error) {
+    healthcheck.message = error;
+    res.status(503).send();
+  }
+});
 
 // curl -X GET http://localhost:3000/blocks
 app.get('/blocks', (_req, res) => res.send(blockchain.chain));
