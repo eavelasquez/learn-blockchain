@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 
 const { P2P_PORT: p2pPort = 5000, PEERS: peersToConnect } = process.env;
 const peers = peersToConnect ? peersToConnect.split(',') : [];
@@ -15,7 +15,7 @@ class P2PService {
   }
 
   listen() {
-    const server = new WebSocket.Server({ port: p2pPort });
+    const server = new WebSocketServer({ port: p2pPort });
     server.on('connection', (socket) => this.onConnection(socket));
 
     peers.forEach((peer) => {
