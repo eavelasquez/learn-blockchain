@@ -33,7 +33,7 @@
     "ws": "^8.7.0"
   },
   "jest": {
-    "silent": true,
+    "silent": false,
     "verbose": true,
     "testEnvironment": "node"
   }
