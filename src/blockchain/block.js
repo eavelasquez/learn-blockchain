@@ -1,10 +1,12 @@
 import sha256 from 'crypto-js/sha256.js';
+import adjustDifficulty from './modules/adjust-difficulty.js';
 
 const DIFFICULTY = 3;
 
 class Block {
-  constructor(data, hash, previousHash, timestamp, nonce) {
+  constructor(data, difficulty, hash, nonce, previousHash, timestamp) {
     this.data = data;
+    this.difficulty = difficulty;
     this.hash = hash;
     this.nonce = nonce;
     this.previousHash = previousHash;
@@ -12,29 +14,50 @@ class Block {
   }
 
   static get genesis() {
-    return new Block('Genesis Block', '0', '', 1465154705, 0);
+    return new Block(
+      'Genesis Block',
+      DIFFICULTY,
+      '0',
+      0,
+      '0',
+      1465154705,
+    );
   }
 
-  static hash(data, previousHash, timestamp, nonce) {
-    return sha256(`${data}${previousHash}${timestamp}${nonce}`).toString();
+  static hash(data, difficulty, nonce, previousHash, timestamp) {
+    return sha256(
+      `${data}${previousHash}${timestamp}${nonce}${difficulty}`
+    ).toString();
   }
 
   static mine(previousBlock, data) {
     const { hash: previousHash } = previousBlock;
-    let hash = '', nonce = 0, timestamp = 0;
+    let { difficulty } = previousBlock,
+      hash = '',
+      nonce = 0,
+      timestamp = 0;
 
     do {
-      nonce += 1;
       timestamp = Date.now();
-      hash = Block.hash(data, previousHash, timestamp, nonce);
-    } while (hash.substring(0, DIFFICULTY) !== '0'.repeat(DIFFICULTY));
+      nonce += 1;
+      difficulty = adjustDifficulty(previousBlock, timestamp);
+      hash = Block.hash(data, difficulty, nonce, previousHash, timestamp);
+    } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
-    return new Block(data, hash, previousHash, timestamp, nonce);
+    return new Block(
+      data,
+      difficulty,
+      hash,
+      previousHash,
+      timestamp,
+      nonce,
+    );
   }
 
   toString() {
     return `Block -
       data: ${this.data}
+      difficulty: ${this.difficulty}
       hash: ${this.hash}
       nonce: ${this.nonce}
       previousHash: ${this.previousHash}
