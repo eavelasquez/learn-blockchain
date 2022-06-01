@@ -56,12 +56,12 @@ class Block {
 
   toString() {
     return `Block -
-      data: ${this.data}
-      difficulty: ${this.difficulty}
-      hash: ${this.hash}
-      nonce: ${this.nonce}
+      data:         ${this.data}
+      difficulty:   ${this.difficulty}
+      hash:         ${this.hash}
+      nonce:        ${this.nonce}
       previousHash: ${this.previousHash}
-      timestamp: ${this.timestamp}
+      timestamp:    ${this.timestamp}
     `;
   }
 }

@@ -9,6 +9,7 @@
     "start": "babel-node src/service/index.js",
     "start:dev": "nodemon --exec yarn start",
     "start:instance": "sh ./scripts/start.sh",
+    "start:miner": "babel-node miner.js",
     "start:sample": "nodemon --exec babel-node index.js",
     "test": "jest",
     "test:watch": "jest --watchAll"
