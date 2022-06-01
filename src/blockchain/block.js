@@ -4,7 +4,7 @@ import adjustDifficulty from './modules/adjust-difficulty.js';
 const DIFFICULTY = 3;
 
 class Block {
-  constructor(data, difficulty, hash, nonce, previousHash, timestamp) {
+  constructor({ data, difficulty, hash, nonce, previousHash, timestamp }) {
     this.data = data;
     this.difficulty = difficulty;
     this.hash = hash;
@@ -14,17 +14,17 @@ class Block {
   }
 
   static get genesis() {
-    return new Block(
-      'Genesis Block',
-      DIFFICULTY,
-      '0',
-      0,
-      '0',
-      1465154705,
-    );
+    return new Block({
+      data: 'Genesis Block',
+      difficulty: DIFFICULTY,
+      hash: '0',
+      nonce: 0,
+      previousHash: '0',
+      timestamp: 1465154705,
+    });
   }
 
-  static hash(data, difficulty, nonce, previousHash, timestamp) {
+  static hash({ data, difficulty, nonce, previousHash, timestamp }) {
     return sha256(
       `${data}${previousHash}${timestamp}${nonce}${difficulty}`
     ).toString();
@@ -41,17 +41,17 @@ class Block {
       timestamp = Date.now();
       nonce += 1;
       difficulty = adjustDifficulty(previousBlock, timestamp);
-      hash = Block.hash(data, difficulty, nonce, previousHash, timestamp);
+      hash = Block.hash({ data, difficulty, nonce, previousHash, timestamp });
     } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
-    return new Block(
+    return new Block({
       data,
       difficulty,
       hash,
       previousHash,
       timestamp,
       nonce,
-    );
+    });
   }
 
   toString() {
