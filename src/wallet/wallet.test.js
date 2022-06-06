@@ -20,4 +20,11 @@ describe('Wallet class', () => {
     expect(result).toMatch(/Wallet -/);
     expect(typeof result).toEqual('string');
   });
+
+  it('should sign a transaction', () => {
+    const signature = wallet.sign('foo');
+
+    expect(typeof signature).toEqual('object');
+    expect(signature).toEqual(wallet.sign('foo'));
+  });
 });
