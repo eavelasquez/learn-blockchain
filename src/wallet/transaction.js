@@ -22,20 +22,27 @@ class Transaction {
         { amount, address: recipientAddress },
       ]
     );
-    transaction.input = {
-      address: senderWallet.publicKey,
-      amount: balance,
-      signature: senderWallet.sign(transaction.outputs),
-      timestamp: Date.now(),
-    };
+    transaction.input = Transaction.sign(transaction, senderWallet);
 
     return transaction;
   }
 
   static verify(transaction) {
-    const { input: { address, signature }, outputs } = transaction;
+    const {
+      input: { address, signature },
+      outputs,
+    } = transaction;
 
     return elliptic.verifySignature(address, signature, outputs);
+  }
+
+  static sign(transaction, senderWallet) {
+    return {
+      address: senderWallet.publicKey,
+      amount: senderWallet.balance,
+      signature: senderWallet.sign(transaction.outputs),
+      timestamp: Date.now(),
+    };
   }
 }
 
