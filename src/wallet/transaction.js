@@ -44,6 +44,24 @@ class Transaction {
       timestamp: Date.now(),
     };
   }
+
+  update(senderWallet, recipientAddress, amount) {
+    const senderOutput = this.outputs.find(
+      (output) => output.address == senderWallet.publicKey
+    );
+
+    if (amount > senderOutput.amount) {
+      throw new Error(
+        `Amount: ${amount} exceeds balance: ${senderOutput.amount}`
+      );
+    }
+
+    senderOutput.amount -= amount;
+    this.outputs.push({ amount, address: recipientAddress });
+    this.input = Transaction.sign(this, senderWallet);
+
+    return this;
+  }
 }
 
 export default Transaction;
