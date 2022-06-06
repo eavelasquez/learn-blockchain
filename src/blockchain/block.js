@@ -1,5 +1,5 @@
-import sha256 from 'crypto-js/sha256.js';
 import adjustDifficulty from './modules/adjust-difficulty.js';
+import generateHash from '../modules/generate-hash.js';
 
 const DIFFICULTY = 3;
 
@@ -25,9 +25,7 @@ class Block {
   }
 
   static hash({ data, difficulty, nonce, previousHash, timestamp }) {
-    return sha256(
-      `${data}${previousHash}${timestamp}${nonce}${difficulty}`
-    ).toString();
+    return generateHash(`${data}${previousHash}${timestamp}${nonce}${difficulty}`);
   }
 
   static mine(previousBlock, data) {

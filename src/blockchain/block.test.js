@@ -37,7 +37,7 @@ describe('Block class', () => {
     const { hash: previousHash } = previousBlock;
     const hash = Block.hash({ data, nonce, previousHash, timestamp });
     const expectedHash =
-      '0ac76a0e566469a2919b31c2bd3e83f4489f8b87db120f61b7e1529a25252b5c';
+      'c45347ab5e7d44b002c440318c3917aca577d465f2275fdde0e78e553f9870b1';
 
     expect(hash).toEqual(expectedHash);
   });
