@@ -56,4 +56,13 @@ describe('Transaction class', () => {
     expect(typeof transaction.input.signature).toEqual('object');
     expect(transaction.input.signature).toEqual(wallet.sign(transaction.outputs));
   });
+
+  it('should validate a valid transaction', () => {
+    expect(Transaction.verify(transaction)).toBe(true);
+  });
+
+  it('should invalidate a corrupt transaction', () => {
+    transaction.outputs[0].amount = amount + 1;
+    expect(Transaction.verify(transaction)).toBe(false);
+  });
 });
