@@ -37,7 +37,7 @@ describe('Transaction class', () => {
       transaction = undefined;
     });
 
-    it('should throw an error', () => {
+    it('should throw an error when creating a transaction', () => {
       expect(() => {
         transaction = Transaction.create(wallet, recipientAddress, amount);
       }).toThrowError(`Amount: ${amount} exceeds balance: ${wallet.balance}`);
@@ -63,6 +63,33 @@ describe('Transaction class', () => {
 
   it('should invalidate a corrupt transaction', () => {
     transaction.outputs[0].amount = amount + 1;
+
     expect(Transaction.verify(transaction)).toBe(false);
+  });
+
+  describe('and updating a transaction', () => {
+    let nextAmount, nextRecipient;
+
+    beforeEach(() => {
+      nextAmount = 10;
+      nextRecipient = 'n3xt-4ddr3ss';
+      transaction = transaction.update(wallet, nextRecipient, nextAmount);
+    });
+
+    it('should subtract the next amount from the sender output amount', () => {
+      const output = transaction.outputs.find(({ address }) => (
+        address === wallet.publicKey
+      ));
+
+      expect(output.amount).toEqual(wallet.balance - amount - nextAmount);
+    });
+
+    it('should add the next amount to the recipient output amount', () => {
+      const output = transaction.outputs.find(({ address }) => (
+        address === nextRecipient
+      ));
+
+      expect(output.amount).toEqual(nextAmount);
+    });
   });
 });
