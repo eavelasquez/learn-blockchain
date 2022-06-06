@@ -21,6 +21,12 @@ class Transaction {
         { amount, address: recipientAddress },
       ]
     );
+    transaction.input = {
+      address: senderWallet.publicKey,
+      amount: balance,
+      signature: senderWallet.sign(transaction.outputs),
+      timestamp: Date.now(),
+    };
 
     return transaction;
   }
