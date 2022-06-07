@@ -1,4 +1,4 @@
-import elliptic from "./elliptic";
-import generateHash from "./generate-hash";
+import elliptic from './elliptic.js';
+import generateHash from './generate-hash.js';
 
 export { elliptic, generateHash };

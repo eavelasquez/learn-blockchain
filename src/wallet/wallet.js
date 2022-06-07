@@ -1,5 +1,5 @@
 import { elliptic, generateHash } from '../modules/index.js';
-import Transaction from './transaction';
+import Transaction from './transaction.js';
 
 const INITIAL_BALANCE = 100;
 

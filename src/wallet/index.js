@@ -1,5 +1,5 @@
-import Transaction from './transaction';
-import Wallet from './wallet';
+import Transaction from './transaction.js';
+import Wallet from './wallet.js';
 
 export { Transaction };
 export default Wallet;
