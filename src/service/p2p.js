@@ -2,7 +2,10 @@ import WebSocket, { WebSocketServer } from 'ws';
 
 const { P2P_PORT: p2pPort = 5000, PEERS: peersToConnect } = process.env;
 const peers = peersToConnect ? peersToConnect.split(',') : [];
-const MESSAGE_TYPES = { chain: 'CHAIN' };
+const MESSAGE_TYPES = {
+  chain: 'CHAIN',
+  transaction: 'TRANSACTION',
+};
 
 class P2PService {
   constructor(blockchain) {
@@ -22,12 +25,16 @@ class P2PService {
           case MESSAGE_TYPES.chain:
             this.blockchain.replaceChain(value);
             break;
+          case MESSAGE_TYPES.transaction:
+            this.blockchain.memoryPool.addOrUpdateTransaction(value);
+            break;
           default:
             console.log(`[ws:socket] unknown message type: ${type}`);
             break;
         }
       } catch (error) {
         console.log(`[ws:message] error ${error.message}`);
+        throw Error(error);
       }
 
       console.group('[ws:message]');
@@ -68,4 +75,5 @@ class P2PService {
   }
 }
 
+export { MESSAGE_TYPES };
 export default P2PService;

@@ -2,13 +2,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import Blockchain from '../blockchain/index.js';
-import P2PService from './p2p.js';
+import P2PService, { MESSAGE_TYPES } from './p2p.js';
+import Wallet from '../wallet/index.js';
 
 const { HTTP_PORT: httpPort = 3000 } = process.env;
 
 const app = express();
 const blockchain = new Blockchain();
 const p2pService = new P2PService(blockchain);
+const wallet = new Wallet(blockchain);
 
 app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -54,6 +56,25 @@ app.post('/mine', (req, res) => {
     message: 'New block added',
     totalBlocks: blockchain.chain.length,
   });
+});
+
+// curl -X GET http://localhost:3000/transactions
+app.get('/transactions', (_req, res) => {
+  const { memoryPool: { transactions } } = blockchain;
+  res.json(transactions);
+});
+
+// curl -X POST -H "Content-Type: application/json" -d '{"recipient": "random-address", "amount": 5}' http://localhost:3000/transaction
+app.post('/transaction', (req, res) => {
+  const { body: { recipientAddress, amount } } = req;
+
+  try {
+    const txn = wallet.createTransaction({ recipientAddress, amount });
+    p2pService.broadcast(MESSAGE_TYPES.transaction, txn);
+    res.json(txn);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 app.listen(httpPort, () => {
