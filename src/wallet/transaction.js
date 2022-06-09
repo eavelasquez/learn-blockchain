@@ -12,7 +12,7 @@ class Transaction {
     const { balance, publicKey } = senderWallet;
 
     if (amount > balance) {
-      throw new Error(`Amount: ${amount} exceeds balance: ${balance}`);
+      throw Error(`Amount: ${amount} exceeds balance: ${balance}`);
     }
 
     const transaction = new Transaction();
@@ -20,7 +20,7 @@ class Transaction {
       ...[
         { amount: balance - amount, address: publicKey },
         { amount, address: recipientAddress },
-      ]
+      ],
     );
     transaction.input = Transaction.sign(transaction, senderWallet);
 
@@ -47,13 +47,11 @@ class Transaction {
 
   update(senderWallet, recipientAddress, amount) {
     const senderOutput = this.outputs.find(
-      (output) => output.address == senderWallet.publicKey
+      (output) => output.address === senderWallet.publicKey,
     );
 
     if (amount > senderOutput.amount) {
-      throw new Error(
-        `Amount: ${amount} exceeds balance: ${senderOutput.amount}`
-      );
+      throw Error(`Amount: ${amount} exceeds balance: ${senderOutput.amount}`);
     }
 
     senderOutput.amount -= amount;

@@ -1,5 +1,5 @@
 import pkg from './package.json' assert {type: "json"};
-import Block from './src/blockchain/block.js';
+import { Block } from './src/blockchain/index.js';
 
 const main = () => {
   console.log('Hello World');

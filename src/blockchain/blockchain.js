@@ -15,15 +15,15 @@ class Blockchain {
     return block;
   }
 
-  replaceChain(newChain) {
-    if (newChain.length <= this.chain.length) {
-      throw new Error('The incoming chain must be longer');
+  replaceChain(newChain = []) {
+    if (newChain.length < this.chain.length) {
+      throw Error('The incoming chain must be longer.');
     }
 
     try {
       validate(newChain);
     } catch (error) {
-      throw new Error('The incoming chain is invalid');
+      throw Error('The incoming chain is invalid.');
     }
 
     this.chain = newChain;

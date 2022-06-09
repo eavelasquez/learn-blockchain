@@ -1,8 +1,11 @@
-import Transaction from './transaction';
-import Wallet from './wallet';
+import Transaction from './transaction.js';
+import Wallet from './wallet.js';
 
 describe('Transaction class', () => {
-  let amount, transaction, wallet, recipientAddress;
+  let amount;
+  let recipientAddress;
+  let transaction;
+  let wallet;
 
   beforeEach(() => {
     amount = 5;
@@ -17,7 +20,7 @@ describe('Transaction class', () => {
 
   it('should output the `amount` subtracted from the wallet balance', () => {
     const output = transaction.outputs.find(
-      ({ address }) => address === wallet.publicKey
+      ({ address }) => address === wallet.publicKey,
     );
 
     expect(output.amount).toEqual(wallet.balance - amount);
@@ -25,7 +28,7 @@ describe('Transaction class', () => {
 
   it('should output the `amount` added to the recipient', () => {
     const output = transaction.outputs.find(
-      ({ address }) => address === recipientAddress
+      ({ address }) => address === recipientAddress,
     );
 
     expect(output.amount).toEqual(amount);
@@ -54,7 +57,9 @@ describe('Transaction class', () => {
 
   it('should input has a signature', () => {
     expect(typeof transaction.input.signature).toEqual('object');
-    expect(transaction.input.signature).toEqual(wallet.sign(transaction.outputs));
+    expect(transaction.input.signature).toEqual(
+      wallet.sign(transaction.outputs),
+    );
   });
 
   it('should validate a valid transaction', () => {
@@ -68,7 +73,8 @@ describe('Transaction class', () => {
   });
 
   describe('and updating a transaction', () => {
-    let nextAmount, nextRecipient;
+    let nextAmount;
+    let nextRecipient;
 
     beforeEach(() => {
       nextAmount = 10;
@@ -77,17 +83,17 @@ describe('Transaction class', () => {
     });
 
     it('should subtract the next amount from the sender output amount', () => {
-      const output = transaction.outputs.find(({ address }) => (
-        address === wallet.publicKey
-      ));
+      const output = transaction.outputs.find(
+        ({ address }) => address === wallet.publicKey,
+      );
 
       expect(output.amount).toEqual(wallet.balance - amount - nextAmount);
     });
 
     it('should add the next amount to the recipient output amount', () => {
-      const output = transaction.outputs.find(({ address }) => (
-        address === nextRecipient
-      ));
+      const output = transaction.outputs.find(
+        ({ address }) => address === nextRecipient,
+      );
 
       expect(output.amount).toEqual(nextAmount);
     });

@@ -5,7 +5,10 @@
     "node": true
   },
   "rules": {
-    "import/extensions": ["ignorePackages"],
+    "import/extensions": [
+      "error",
+      "ignorePackages"
+    ],
     "max-len": [1, 120, { "tabWidth": 2, "ignoreComments": true }],
     "no-console": "off"
   }

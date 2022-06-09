@@ -1,5 +1,5 @@
-import Blockchain from '../blockchain';
-import Wallet, { INITIAL_BALANCE } from './wallet';
+import Blockchain from '../blockchain/index.js';
+import Wallet, { INITIAL_BALANCE } from './wallet.js';
 
 describe('Wallet class', () => {
   let wallet;
@@ -49,7 +49,7 @@ describe('Wallet class', () => {
 
       it('should double the amount subtracted from the wallet account', () => {
         const output = transaction.outputs.find(
-          (output) => output.address === wallet.publicKey
+          ({ address }) => address === wallet.publicKey,
         );
 
         expect(output.amount).toEqual(wallet.balance - amount * 2);

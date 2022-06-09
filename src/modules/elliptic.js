@@ -1,6 +1,7 @@
 import Elliptic from 'elliptic';
-import generateHash from '../modules/generate-hash.js';
+import generateHash from './generate-hash.js';
 
+// eslint-disable-next-line new-cap
 const ec = new Elliptic.ec('secp256k1');
 
 export default {
@@ -10,5 +11,5 @@ export default {
     const hash = generateHash(data);
 
     return key.verify(hash, signature);
-  }
-}
+  },
+};

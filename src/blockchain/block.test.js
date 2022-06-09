@@ -1,12 +1,14 @@
 import Block from './block.js';
-import { DIFFICULTY } from './block.js';
 
 describe('Block class', () => {
-  let data, difficulty, hash, nonce, previousBlock, timestamp;
+  let data;
+  let hash;
+  let nonce;
+  let previousBlock;
+  let timestamp;
 
   beforeEach(() => {
     data = 'Block data';
-    difficulty = DIFFICULTY;
     hash = '0';
     nonce = 128;
     previousBlock = Block.genesis;
@@ -15,7 +17,13 @@ describe('Block class', () => {
 
   it('should create a new block', () => {
     const { hash: previousHash } = previousBlock;
-    const block = new Block({ data, nonce, hash, previousHash, timestamp });
+    const block = new Block({
+      data,
+      nonce,
+      hash,
+      previousHash,
+      timestamp,
+    });
 
     expect(block.data).toEqual(data);
     expect(block.hash).toEqual(hash);
@@ -35,9 +43,13 @@ describe('Block class', () => {
 
   it('should create a new hash', () => {
     const { hash: previousHash } = previousBlock;
-    const hash = Block.hash({ data, nonce, previousHash, timestamp });
-    const expectedHash =
-      'c45347ab5e7d44b002c440318c3917aca577d465f2275fdde0e78e553f9870b1';
+    hash = Block.hash({
+      data,
+      nonce,
+      previousHash,
+      timestamp,
+    });
+    const expectedHash = 'c45347ab5e7d44b002c440318c3917aca577d465f2275fdde0e78e553f9870b1';
 
     expect(hash).toEqual(expectedHash);
   });
@@ -47,7 +59,9 @@ describe('Block class', () => {
 
     expect(block.data).toEqual(`${data} - 1`);
     expect(block.hash.length).toEqual(64);
-    expect(block.hash.substring(0, block.difficulty)).toEqual('0'.repeat(block.difficulty));
+    expect(block.hash.substring(0, block.difficulty)).toEqual(
+      '0'.repeat(block.difficulty),
+    );
     expect(block.nonce).toBeGreaterThan(0);
     expect(block.previousHash).toEqual(previousBlock.hash);
     expect(block.timestamp).toBeGreaterThan(previousBlock.timestamp);

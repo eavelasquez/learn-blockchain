@@ -19,13 +19,13 @@ class Wallet {
   toString() {
     return `Wallet -
       balance:   ${this.balance}
-      publicKey: ${this.publicKey}
+      publicKey: ${this.publicKey.toString()}
     `;
   }
 
   createTransaction({ recipientAddress, amount }) {
     if (amount > this.balance) {
-      throw new Error(`Amount: ${amount} exceeds balance: ${this.balance}`);
+      throw Error(`Amount: ${amount} exceeds balance: ${this.balance}`);
     }
 
     let txn = this.blockchain.memoryPool.findTransaction(this.publicKey);

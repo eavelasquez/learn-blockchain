@@ -14,14 +14,17 @@ const wallet = new Wallet(blockchain);
 
 app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE',
+  );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, _res, next) => {
-  console.log('⬅️ ', req.method, req.path, req.body ?? req.query);
+  console.log('⬅️ ', req.method, req.path, req.body || req.query);
   next();
 });
 
@@ -42,11 +45,13 @@ app.get('/healthcheck', (_req, res) => {
 });
 
 // curl -X GET http://localhost:3000/blocks
-app.get('/blocks', (_req, res) => res.send(blockchain.chain));
+app.get('/blocks', (req, res) => res.json(blockchain.chain));
 
 // curl -X POST -H "Content-Type: application/json" -d '{"data": "Block 1"}' http://localhost:3000/mine
 app.post('/mine', (req, res) => {
-  const { body: { data } } = req;
+  const {
+    body: { data },
+  } = req;
   const block = blockchain.addBlock(data);
 
   p2pService.sync();
@@ -60,13 +65,17 @@ app.post('/mine', (req, res) => {
 
 // curl -X GET http://localhost:3000/transactions
 app.get('/transactions', (_req, res) => {
-  const { memoryPool: { transactions } } = blockchain;
+  const {
+    memoryPool: { transactions },
+  } = blockchain;
   res.json(transactions);
 });
 
 // curl -X POST -H "Content-Type: application/json" -d '{"recipient": "random-address", "amount": 5}' http://localhost:3000/transaction
 app.post('/transaction', (req, res) => {
-  const { body: { recipientAddress, amount } } = req;
+  const {
+    body: { recipientAddress, amount },
+  } = req;
 
   try {
     const txn = wallet.createTransaction({ recipientAddress, amount });

@@ -4,7 +4,9 @@ import generateHash from '../modules/generate-hash.js';
 const DIFFICULTY = 3;
 
 class Block {
-  constructor({ data, difficulty, hash, nonce, previousHash, timestamp }) {
+  constructor({
+    data, difficulty, hash, nonce, previousHash, timestamp,
+  }) {
     this.data = data;
     this.difficulty = difficulty;
     this.hash = hash;
@@ -24,22 +26,32 @@ class Block {
     });
   }
 
-  static hash({ data, difficulty, nonce, previousHash, timestamp }) {
-    return generateHash(`${data}${previousHash}${timestamp}${nonce}${difficulty}`);
+  static hash({
+    data, difficulty, nonce, previousHash, timestamp,
+  }) {
+    return generateHash(
+      `${data}${previousHash}${timestamp}${nonce}${difficulty}`,
+    );
   }
 
   static mine(previousBlock, data) {
     const { hash: previousHash } = previousBlock;
-    let { difficulty } = previousBlock,
-      hash = '',
-      nonce = 0,
-      timestamp = 0;
+    let { difficulty } = previousBlock;
+    let hash = '';
+    let nonce = 0;
+    let timestamp = 0;
 
     do {
       timestamp = Date.now();
       nonce += 1;
       difficulty = adjustDifficulty(previousBlock, timestamp);
-      hash = Block.hash({ data, difficulty, nonce, previousHash, timestamp });
+      hash = Block.hash({
+        data,
+        difficulty,
+        nonce,
+        previousHash,
+        timestamp,
+      });
     } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
     return new Block({

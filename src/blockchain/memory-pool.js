@@ -6,20 +6,23 @@ class MemoryPool {
   }
 
   addOrUpdateTransaction(transaction) {
-    const { input, output = [] } = transaction;
+    const { input, outputs = [] } = transaction;
 
-    const outputTotal = output.reduce((total, output) => total + output.amount, 0);
+    const outputTotal = outputs.reduce(
+      (total, { amount }) => total + amount,
+      0,
+    );
     // TODO: pending test case
-    if (outputTotal != input.amount) {
-      throw new Error(`Invalid transaction from ${input.address}`);
+    if (outputTotal !== input.amount) {
+      throw Error(`Invalid transaction from ${input.address}`);
     }
     // TODO: pending test case
     if (!Transaction.verify(transaction)) {
-      throw new Error(`Invalid signature from ${input.address}`);
+      throw Error(`Invalid signature from ${input.address}`);
     }
 
     const txnIndex = this.transactions.findIndex(
-      (txn) => txn.id === transaction.id
+      (txn) => txn.id === transaction.id,
     );
 
     if (txnIndex >= 0) {

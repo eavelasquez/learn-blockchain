@@ -33,7 +33,7 @@ class P2PService {
             break;
         }
       } catch (error) {
-        console.log(`[ws:message] error ${error.message}`);
+        console.log(`[ws:message] error ${error}`);
         throw Error(error);
       }
 
@@ -47,7 +47,7 @@ class P2PService {
       JSON.stringify({
         type: MESSAGE_TYPES.chain,
         value: this.blockchain.chain,
-      })
+      }),
     );
   }
 

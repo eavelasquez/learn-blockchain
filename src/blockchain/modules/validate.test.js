@@ -18,20 +18,26 @@ describe('validate module', () => {
   it('should be able to validate an invalid genesis block', () => {
     blockchain.chain[0].data = 'Invalid data';
 
-    expect(() => validate(blockchain.chain)).toThrowError('The genesis block is invalid');
+    expect(() => validate(blockchain.chain)).toThrowError(
+      'The genesis block is invalid.',
+    );
   });
 
   it('should be able to validate an invalid previous hash', () => {
     blockchain.addBlock('Block 1');
     blockchain.chain[1].previousHash = 'Invalid previous hash';
 
-    expect(() => validate(blockchain.chain)).toThrowError('The previous hash is invalid');
+    expect(() => validate(blockchain.chain)).toThrowError(
+      'The previous hash is invalid.',
+    );
   });
 
   it('should be able to validate an invalid hash', () => {
     blockchain.addBlock('Block 1');
     blockchain.chain[1].hash = 'Invalid hash';
 
-    expect(() => validate(blockchain.chain)).toThrowError('The hash is invalid');
+    expect(() => validate(blockchain.chain)).toThrowError(
+      'The hash is invalid.',
+    );
   });
 });
