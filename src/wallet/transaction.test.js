@@ -1,4 +1,5 @@
-import Transaction from './transaction.js';
+import { blockchainWallet } from './index.js';
+import Transaction, { MINING_REWARD } from './transaction.js';
 import Wallet from './wallet.js';
 
 describe('Transaction class', () => {
@@ -96,6 +97,26 @@ describe('Transaction class', () => {
       );
 
       expect(output.amount).toEqual(nextAmount);
+    });
+  });
+
+  describe('and creating a reward transaction', () => {
+    beforeEach(() => {
+      transaction = Transaction.reward(wallet, blockchainWallet);
+    });
+
+    it('should reward the miners wallet', () => {
+      let output = transaction.outputs.find(
+        ({ address }) => address === wallet.publicKey,
+      );
+      expect(output.amount).toEqual(MINING_REWARD);
+
+      output = transaction.outputs.find(
+        ({ address }) => address === blockchainWallet.publicKey,
+      );
+      expect(output.amount).toEqual(blockchainWallet.balance - MINING_REWARD);
+
+      expect(transaction.outputs.length).toEqual(2);
     });
   });
 });
