@@ -5,6 +5,7 @@ const peers = peersToConnect ? peersToConnect.split(',') : [];
 const MESSAGE_TYPES = {
   chain: 'CHAIN',
   transaction: 'TRANSACTION',
+  clear: 'CLEAR',
 };
 
 class P2PService {
@@ -27,6 +28,9 @@ class P2PService {
             break;
           case MESSAGE_TYPES.transaction:
             this.blockchain.memoryPool.addOrUpdateTransaction(value);
+            break;
+          case MESSAGE_TYPES.clear:
+            this.blockchain.memoryPool.wipeTransactions();
             break;
           default:
             console.log(`[ws:socket] unknown message type: ${type}`);
