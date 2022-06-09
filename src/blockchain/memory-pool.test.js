@@ -43,4 +43,11 @@ describe('MemoryPool class', () => {
     expect(newTransaction).toEqual(found);
     expect(memoryPool.transactions.length).toBe(1);
   });
+
+  it('should wipe transactions from the memory pool', () => {
+    memoryPool.wipeTransactions();
+
+    expect(memoryPool.transactions).toEqual([]);
+    expect(memoryPool.transactions.length).toBe(0);
+  });
 });
