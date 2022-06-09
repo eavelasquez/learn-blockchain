@@ -4,8 +4,8 @@ import Transaction from './transaction.js';
 const INITIAL_BALANCE = 100;
 
 class Wallet {
-  constructor(blockchain) {
-    this.balance = INITIAL_BALANCE;
+  constructor(blockchain, initialBalance = INITIAL_BALANCE) {
+    this.balance = initialBalance;
     this.blockchain = blockchain;
     this.keyPair = elliptic.createKeyPair();
     this.publicKey = this.keyPair.getPublic().encode('hex');
