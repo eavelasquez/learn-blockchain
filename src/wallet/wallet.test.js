@@ -65,7 +65,7 @@ describe('Wallet class', () => {
     });
   });
 
-  describe('calculating balance', () => {
+  describe('calculating the current balance', () => {
     let addBalance;
     let times;
     let senderWallet;
@@ -86,14 +86,14 @@ describe('Wallet class', () => {
     });
 
     it('should calculate the balance for blockchain txs matching the recipient', () => {
-      const balance = wallet.calculateBalance();
+      const balance = wallet.currentBalance;
       const expectedBalance = INITIAL_BALANCE + (addBalance * times);
 
       expect(balance).toEqual(expectedBalance);
     });
 
     it('should calculate the balance for blockchain txs matching the sender', () => {
-      const balance = senderWallet.calculateBalance();
+      const balance = senderWallet.currentBalance;
       const expectedBalance = INITIAL_BALANCE - (addBalance * times);
 
       expect(balance).toEqual(expectedBalance);
@@ -105,7 +105,7 @@ describe('Wallet class', () => {
 
       beforeEach(() => {
         subtractBalance = 64;
-        recipientBalance = wallet.calculateBalance();
+        recipientBalance = wallet.currentBalance;
 
         blockchain.memoryPool.wipeTransactions();
 
@@ -130,7 +130,7 @@ describe('Wallet class', () => {
         });
 
         it('should calculate the recipient balance only using txs since its mos recent one', () => {
-          const balance = wallet.calculateBalance();
+          const balance = wallet.currentBalance;
           const expectedBalance = recipientBalance - subtractBalance + addBalance;
 
           expect(balance).toEqual(expectedBalance);
