@@ -64,4 +64,78 @@ describe('Wallet class', () => {
       });
     });
   });
+
+  describe('calculating balance', () => {
+    let addBalance;
+    let times;
+    let senderWallet;
+
+    beforeEach(() => {
+      addBalance = 16;
+      times = 3;
+      senderWallet = new Wallet(blockchain);
+
+      for (let i = 0; i < times; i += 1) {
+        senderWallet.createTransaction({
+          recipientAddress: wallet.publicKey,
+          amount: addBalance,
+        });
+      }
+
+      blockchain.addBlock(blockchain.memoryPool.transactions);
+    });
+
+    it('should calculate the balance for blockchain txs matching the recipient', () => {
+      const balance = wallet.calculateBalance();
+      const expectedBalance = INITIAL_BALANCE + (addBalance * times);
+
+      expect(balance).toEqual(expectedBalance);
+    });
+
+    it('should calculate the balance for blockchain txs matching the sender', () => {
+      const balance = senderWallet.calculateBalance();
+      const expectedBalance = INITIAL_BALANCE - (addBalance * times);
+
+      expect(balance).toEqual(expectedBalance);
+    });
+
+    describe('and the recipient conducts a transaction', () => {
+      let subtractBalance;
+      let recipientBalance;
+
+      beforeEach(() => {
+        subtractBalance = 64;
+        recipientBalance = wallet.calculateBalance();
+
+        blockchain.memoryPool.wipeTransactions();
+
+        wallet.createTransaction({
+          recipientAddress: senderWallet.publicKey,
+          amount: addBalance,
+        });
+
+        blockchain.addBlock(blockchain.memoryPool.transactions);
+      });
+
+      describe('and the sender sends another transaction to recipient', () => {
+        beforeEach(() => {
+          blockchain.memoryPool.wipeTransactions();
+
+          senderWallet.createTransaction({
+            recipientAddress: wallet.publicKey,
+            amount: addBalance,
+          });
+
+          blockchain.addBlock(blockchain.memoryPool.transactions);
+        });
+
+        it('should calculate the recipient balance only using txs since its mos recent one', () => {
+          const balance = wallet.calculateBalance();
+          const expectedBalance = recipientBalance - subtractBalance + addBalance;
+
+          expect(balance).toEqual(expectedBalance);
+        });
+      });
+    });
+  });
 });
