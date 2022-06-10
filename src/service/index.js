@@ -54,6 +54,12 @@ app.get('/healthcheck', (_req, res) => {
 // curl -X GET http://localhost:3000/blocks
 app.get('/blocks', (req, res) => res.json(blockchain.chain));
 
+// curl -X POST -H "Content-Type: application/json" http://localhost:3000/wallet
+app.post('/wallet', (req, res) => {
+  const { publicKey } = new Wallet(blockchain);
+  res.json({ publicKey });
+});
+
 // curl -X GET http://localhost:3000/transactions
 app.get('/transactions', (_req, res) => {
   const {
