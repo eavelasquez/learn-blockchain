@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import Blockchain from '../blockchain/index.js';
+import Miner from '../miner/index.js';
 import P2PService, { MESSAGE_TYPES } from './p2p.js';
 import Wallet from '../wallet/index.js';
 
@@ -11,6 +12,12 @@ const app = express();
 const blockchain = new Blockchain();
 const p2pService = new P2PService(blockchain);
 const wallet = new Wallet(blockchain);
+const walletMiner = new Wallet(blockchain, 0);
+const miner = new Miner({
+  blockchain,
+  p2pService,
+  wallet: walletMiner,
+});
 
 app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,7 +78,7 @@ app.get('/transactions', (_req, res) => {
   res.json(transactions);
 });
 
-// curl -X POST -H "Content-Type: application/json" -d '{"recipient": "random-address", "amount": 5}' http://localhost:3000/transaction
+// curl -X POST -H "Content-Type: application/json" -d '{"recipientAddress": "random-address", "amount": 5}' http://localhost:3000/transaction
 app.post('/transaction', (req, res) => {
   const {
     body: { recipientAddress, amount },
@@ -81,6 +88,16 @@ app.post('/transaction', (req, res) => {
     const txn = wallet.createTransaction({ recipientAddress, amount });
     p2pService.broadcast(MESSAGE_TYPES.transaction, txn);
     res.json(txn);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// curl -X GET http://localhost:3000/mine/transactions
+app.get('/mine/transactions', (_req, res) => {
+  try {
+    miner.mine();
+    res.redirect('/blocks');
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
