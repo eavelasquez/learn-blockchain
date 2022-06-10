@@ -31,11 +31,11 @@ $ yarn test
 
 ## Next Steps
 
-1. Add a new endpoints /wallet
-  1. Add a new endpoint /wallet/create
-  1. Add a new endpoint /wallet/:address/balance
-  1. Add a new endpoint /wallet/:address/transactions
-1. Include a fee in the transaction
+1. Add a new endpoints `/wallet`
+  1. Add a new endpoint `/wallet/create`
+  1. Add a new endpoint `/wallet/:address/balance`
+  1. Add a new endpoint `/wallet/:address/transactions`
+1. Include a fee in the transaction. <br />
   NOTE: The fee is the amount of coins that are sent to the miner as a reward.
 1. A client application that can create, send, and receive coins, etc.
 1. Improve the mining logic so that it selects a maximum number of transactions according to the fees.
