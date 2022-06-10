@@ -24,8 +24,9 @@ class Wallet {
   }
 
   createTransaction({ recipientAddress, amount }) {
-    if (amount > this.balance) {
-      throw Error(`Amount: ${amount} exceeds balance: ${this.balance}`);
+    const balance = this.calculateBalance();
+    if (amount > balance) {
+      throw Error(`Amount: ${amount} exceeds balance: ${balance}`);
     }
 
     let txn = this.blockchain.memoryPool.findTransaction(this.publicKey);
