@@ -9,7 +9,7 @@ class Miner {
   }
 
   mine() {
-    if (this.blockchain.memoryPool.length === 0) {
+    if (this.blockchain.memoryPool.transactions.length === 0) {
       throw new Error('There are no unconfirmed transactions.');
     }
 
