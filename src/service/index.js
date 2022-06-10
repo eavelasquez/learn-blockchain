@@ -54,22 +54,6 @@ app.get('/healthcheck', (_req, res) => {
 // curl -X GET http://localhost:3000/blocks
 app.get('/blocks', (req, res) => res.json(blockchain.chain));
 
-// curl -X POST -H "Content-Type: application/json" -d '{"data": "Block 1"}' http://localhost:3000/mine
-app.post('/mine', (req, res) => {
-  const {
-    body: { data },
-  } = req;
-  const block = blockchain.addBlock(data);
-
-  p2pService.sync();
-
-  res.json({
-    block,
-    message: 'New block added',
-    totalBlocks: blockchain.chain.length,
-  });
-});
-
 // curl -X GET http://localhost:3000/transactions
 app.get('/transactions', (_req, res) => {
   const {
